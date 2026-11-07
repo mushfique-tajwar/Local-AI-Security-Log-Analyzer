@@ -1,17 +1,10 @@
-"""One-time model download (needs internet). After this the app runs fully offline.
-
-  python scripts/download_model.py                       # Qwen3.5 2B, Q4_K_M (default)
-  python scripts/download_model.py --size 0.8b           # smaller/faster
-  python scripts/download_model.py --repo unsloth/Qwen3.5-2B-GGUF --file Qwen3.5-2B-Q4_K_M.gguf
-"""
 import argparse
 import shutil
 from pathlib import Path
-
 from huggingface_hub import hf_hub_download
 
 PRESETS = {
-    "0.8b": ("unsloth/Qwen3.5-0.8B-GGUF", "Qwen3.5-0.8B-Q4_K_M.gguf"),   # ~533 MB
+    "0.8b": ("unsloth/Qwen3.5-0.8B-GGUF", "Qwen3.5-0.8B-Q4_K_M.gguf"),
     "2b": ("unsloth/Qwen3.5-2B-GGUF", "Qwen3.5-2B-Q4_K_M.gguf"),
 }
 
