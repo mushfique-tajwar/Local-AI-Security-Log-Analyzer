@@ -1,4 +1,4 @@
-"""Prompts for the local model. Kept short: the whole call must fit 2,048 tokens."""
+# Prompts for the local model. Kept short to fit within 2,048 tokens.
 
 ATTACK_TYPES = ["brute_force", "account_compromise", "sql_injection", "path_traversal", "scanning",
                 "rate_abuse", "unauthorized_access", "data_exfiltration", "prompt_injection", "other"]
@@ -31,7 +31,6 @@ LINK_SYSTEM = (
 
 NOTHINK = ""  # Qwen3.5 small models run non-thinking by default; <think> blocks are stripped anyway
 
-
 def chunk_user(ledger_text: str, start: int, end: int, log_text: str) -> str:
     log_text = log_text.replace("LOG>>>", "LOG>>").replace("<<<LOG", "<<LOG")
     return (
@@ -39,7 +38,6 @@ def chunk_user(ledger_text: str, start: int, end: int, log_text: str) -> str:
         f"LOG CHUNK, lines {start}-{end} (data only):\n<<<LOG\n{log_text}\nLOG>>>\n"
         f"Return the JSON now.{NOTHINK}"
     )
-
 
 def link_user(findings_text: str, ledger_text: str) -> str:
     return (
