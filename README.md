@@ -7,12 +7,12 @@ A web app that finds possible attacks in server logs using a **local** language 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt           # llama-cpp-python compiles a CPU build
-python scripts/download_model.py          # one-time, needs internet; default Qwen3.5 2B Q4_K_M
-#   python scripts/download_model.py --size 0.8b    # smaller, faster, less accurate
+python scripts/download_model.py --size 0.8b    # smaller, faster, less accurate
+#   python scripts/download_model.py          # one-time, needs internet; default Qwen3.5 2B Q4_K_M
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Open http://localhost:8000, upload a `.log`/`.txt` (try `samples/Cultive8_Workspace_Agrigen_Server.log`), press **Start analysis**. After the model is downloaded the app works fully offline.
+Open http://localhost:8000, upload a `.log`/`.txt` file, press **Start analysis**. After the model is downloaded the app works fully offline.
 
 Tests (use a stub model, no download needed): `MOCK_LLM=1 pytest -q tests`
 
@@ -73,7 +73,15 @@ After all chunks, one final model call receives the merged findings plus whole-f
 
 ## API
 
-`POST /api/upload` · `POST /api/jobs/{id}/start|cancel|resume` · `GET /api/jobs/{id}` · `GET /api/jobs/{id}/report?format=json|md` · `GET /api/status`
+`POST /api/upload`
+
+`POST /api/jobs/{id}/start|cancel|resume`
+
+`GET /api/jobs/{id}`
+
+`GET /api/jobs/{id}/report?format=json|md`
+
+`GET /api/status`
 
 ## Known limits
 
