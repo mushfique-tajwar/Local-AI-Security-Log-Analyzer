@@ -1,15 +1,6 @@
-"""Token-aware, line-preserving log splitter.
-
-Every log line is one entry (JSON-lines or plain). Chunks are built from whole lines
-only, so entries are never cut. A single line that alone exceeds the budget is
-truncated with a marker (its line number is kept). Original line numbers are
-preserved by prefixing each line with `L<n>|`.
-
-The file is streamed; only the current chunk is held in memory.
-"""
+# Token-aware, line-preserving log splitter.
 from dataclasses import dataclass, field
 from typing import Callable, Iterable, Iterator
-
 
 @dataclass
 class Chunk:
@@ -20,11 +11,9 @@ class Chunk:
     tokens: int
     raw: list = field(default_factory=list)   # [(line_no, raw_line)] for ledger/validation
 
-
 def _compact(line: str) -> str:
     """Whitespace-compact a line without changing its content."""
     return " ".join(line.split())
-
 
 def split_lines(
     lines: Iterable[str],

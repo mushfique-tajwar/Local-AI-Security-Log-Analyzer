@@ -1,4 +1,4 @@
-"""Multi-call analysis pipeline: chunk -> ledger -> model call -> validate -> checkpoint -> link -> report."""
+# Multi-call analysis pipeline: chunk -> ledger -> model call -> validate -> checkpoint -> link -> report
 import json
 import os
 import threading

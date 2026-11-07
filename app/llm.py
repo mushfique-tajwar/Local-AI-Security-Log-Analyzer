@@ -1,10 +1,3 @@
-"""Local model wrapper (llama.cpp via llama-cpp-python). No network calls at runtime.
-
-- One model instance, one call at a time (lock) -> bounded RAM (<= ~2 GB for a 2B Q4 model).
-- Token counting uses the model's own tokenizer.
-- Streaming generation with a wall-clock deadline so a stuck call cannot hang the job.
-- MockLLM exists only for tests / CI (MOCK_LLM=1); it never runs in normal use.
-"""
 import json
 import re
 import threading
@@ -13,17 +6,13 @@ from pathlib import Path
 
 from . import config
 
-
 class LLMTimeout(Exception):
     pass
-
 
 class LLMError(Exception):
     pass
 
-
 _THINK = re.compile(r"<think>.*?</think>", re.S)
-
 
 class LocalLLM:
     kind = "llama.cpp"
@@ -100,7 +89,6 @@ class LocalLLM:
             except Exception:
                 pass
             return _THINK.sub("", "".join(parts)).strip()
-
 
 class MockLLM:
     """Deterministic stub for unit tests only. Reads the KNOWN FACTS block and echoes a finding."""

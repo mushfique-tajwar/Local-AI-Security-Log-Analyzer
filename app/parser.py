@@ -1,9 +1,5 @@
-"""Light log-line parsing used for (a) compact prompt digests and (b) the cross-chunk ledger.
+# Light log-line parsing used for compact prompt digests and the cross-chunk ledger.
 
-Parsing never decides what an attack is; it only extracts facts (counts, first/last line
-numbers) that are handed to the local model as context and used to validate its output.
-Supports JSON-lines logs and common/combined access-log lines; unknown lines pass through.
-"""
 import json
 import re
 from typing import Optional

@@ -1,13 +1,4 @@
-"""Cross-chunk evidence ledger.
-
-The ledger is updated after every chunk with deterministic *facts* (not verdicts):
-per-IP failed-login counts, first/last line numbers, success-after-failure, scan-path
-hits, injection-looking query strings, request bursts, 4xx/403 counts.
-
-For each later model call, `render_for_prompt` emits a compact, budgeted summary of the
-entities that matter so the model can link events across chunks (e.g. failures in chunk 1,
-more in chunk 3, success in chunk 5). The ledger is JSON-serialisable for resume.
-"""
+# Cross-chunk evidence ledger
 import re
 from collections import defaultdict
 from urllib.parse import unquote
@@ -33,10 +24,8 @@ def _new_entity():
         "ua": "", "chunks": [],
     }
 
-
 def _cap(lst, n=8):
     return lst[:n]
-
 
 class Ledger:
     def __init__(self):
@@ -61,7 +50,6 @@ class Ledger:
 
     # ---- updating ----------------------------------------------------
     def update(self, chunk_index: int, numbered_raw: list[tuple[int, str]]):
-        """numbered_raw: [(line_no, raw_line)] for the chunk."""
         for n, raw in numbered_raw:
             self.total_lines = max(self.total_lines, n)
             d = parse_line(raw)
@@ -186,7 +174,6 @@ class Ledger:
         return "\n".join(out)
 
     def all_event_lines(self) -> set:
-        """Every line number the ledger has an opinion about (valid evidence references)."""
         keys = ("fail_lines", "success_lines", "sqli_lines", "traversal_lines", "scan_lines",
                 "denied_lines", "burst_lines", "inject_lines", "big_export_lines", "admin_lines")
         s = set()

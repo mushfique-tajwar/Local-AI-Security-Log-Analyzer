@@ -16,7 +16,7 @@ MAX_UPLOAD_BYTES = int(os.getenv("MAX_UPLOAD_BYTES", 5 * 1024 * 1024))
 RAM_LIMIT_MB = int(os.getenv("RAM_LIMIT_MB", 4096))
 
 # Token budget plan (sums to <= N_CTX)
-MAX_OUTPUT_TOKENS = int(os.getenv("MAX_OUTPUT_TOKENS", 450))   # reply
+MAX_OUTPUT_TOKENS = int(os.getenv("MAX_OUTPUT_TOKENS", 450))    # reply
 SAFETY_MARGIN = 64                                              # chat template overhead / tokenizer drift
 SYSTEM_PROMPT_BUDGET = 330                                      # measured at startup, checked by test
 LEDGER_BUDGET = int(os.getenv("LEDGER_BUDGET", 260))            # carried context

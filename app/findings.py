@@ -1,10 +1,5 @@
-"""Normalisation, validation, fact-checking and merging of model findings.
+# Normalisation, validation, fact-checking and merging of model findings.
 
-The model proposes; this module disposes. A finding survives only if it has a valid type,
-severity, an entity and at least one evidence line that exists in the log. Findings whose
-claim is not supported by the ledger facts are capped at Low and marked unverified, so
-normal errors cannot become 'confirmed attacks'.
-"""
 import re
 
 from .prompts import ATTACK_TYPES

@@ -1,4 +1,4 @@
-"""Tolerant JSON extraction for small-model output. Never raises."""
+# Tolerant JSON extraction for small-model output. Never raises 
 import json
 import re
 
