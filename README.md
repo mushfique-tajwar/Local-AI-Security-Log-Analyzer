@@ -5,7 +5,8 @@ A web app that finds possible attacks in server logs using a **local** language 
 ## Setup
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate # for linux users
+# python -m venv .venv && source .venv/bin/activate # for windows users
 pip install -r requirements.txt           # llama-cpp-python compiles a CPU build
 python scripts/download_model.py --size 0.8b    # smaller, faster, less accurate
 #   python scripts/download_model.py          # one-time, needs internet; default Qwen3.5 2B Q4_K_M

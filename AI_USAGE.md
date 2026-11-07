@@ -2,7 +2,7 @@
 
 ## Tools used
 - **Claude (Anthropic) via Claude Code** wrote the first version of the code, tests and docs from the assessment brief and the supplied log.
-- **Local model for log analysis:** Qwen3.5 (2B default, 0.8B optional), GGUF Q4_K_M, via llama.cpp. No cloud AI is used at runtime.
+- **Local model for log analysis:** Qwen3.5 (0.8B default, 2B optional), GGUF Q4_K_M, via llama.cpp. No cloud AI is used at runtime.
 
 ## Key coding prompts (summarised)
 1. "Build this for me with everything" with the brief PDF and sample log attached. Led to the architecture: streaming token-aware chunker, per-IP ledger, bounded model calls, final linking call, FastAPI + single-page dashboard.
