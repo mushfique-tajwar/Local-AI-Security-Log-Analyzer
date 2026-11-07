@@ -1,31 +1,29 @@
 # Local AI Security Log Analyzer
 
-A web app that finds possible attacks in server logs using a **local** language model (llama.cpp, CPU only, no cloud AI APIs). Logs larger than the model's 2,048-token context are split, analysed in several calls, linked across parts, and merged into one final report.
+A web app that finds possible attacks in server logs using a local language model (llama.cpp, CPU only, no cloud AI APIs). Logs larger than the model's 2,048-token context are split, analysed in several calls, linked across parts, and merged into one final report.
 
 ## Setup
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate # for linux users
-# python -m venv .venv && source .venv/bin/activate # for windows users
-pip install -r requirements.txt           # llama-cpp-python compiles a CPU build
-python scripts/download_model.py --size 0.8b    # smaller, faster, less accurate
-#   python scripts/download_model.py          # one-time, needs internet; default Qwen3.5 2B Q4_K_M
+python3 -m venv .venv && source .venv/bin/activate # for Linux users
+#python -m venv .venv && source .venv/bin/activate # for Windows users
+pip install -r requirements.txt
+python scripts/download_model.py --size 0.8b    # Smaller, Faster, Less accurate
+#python scripts/download_model.py          # Larger, Slower, More accurate
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-Open http://localhost:8000, upload a `.log`/`.txt` file, press **Start analysis**. After the model is downloaded the app works fully offline.
+Open http://localhost:8000, upload a `.log`/`.txt` file, press **Start analysis**. Once a model is downloaded the app works fully offline, no internet connection is needed and no need to re-download.
 
-Tests (use a stub model, no download needed): `MOCK_LLM=1 pytest -q tests`
 
 ## Model details
 
 | Item | Value |
 |---|---|
 | Runtime | llama.cpp through `llama-cpp-python`, CPU only |
-| Default model | Qwen3.5 2B, GGUF Q4_K_M (`unsloth/Qwen3.5-2B-GGUF`); `--size 0.8b` also supported |
+| Default model | Qwen3.5 0.8B, GGUF Q4_K_M (`unsloth/Qwen3.5-0.8B-GGUF`); Qwen3.5 2B also supported |
 | Context | `n_ctx=2048`, `n_threads=2`, `n_batch=256`, mmap on |
 | Decoding | temperature 0, JSON-grammar-constrained output (`response_format=json_object`) |
-| Switching models | set `MODEL_PATH=/path/to/any.gguf` (any llama.cpp chat model) |
 
 RAM: only one model instance exists and calls run one at a time. The log is streamed line by line, so only the current chunk (about 900 tokens) is held in memory. The job page shows live and peak RSS against the 4 GB limit.
 
@@ -91,9 +89,4 @@ After all chunks, one final model call receives the merged findings plus whole-f
 - The ledger parser understands JSON-lines logs, combined/common access logs and sshd auth lines; other formats are passed to the model as plain digests without ledger facts.
 - CPU generation speed: expect several seconds to tens of seconds per call on 2 vCPU; a ~200-line log takes a few minutes.
 - Upload limit is 5 MB by default (`MAX_UPLOAD_BYTES`).
-- Not yet implemented: switching models from the UI (use `MODEL_PATH`), per-IP time-window analysis beyond what the log reports in `requests_in_window`.
-
-## Verification status (please read)
-
-- Verified: chunking, ledger linking across chunks, JSON repair, validation/fact-check, retry/split/resume logic and the HTTP API, via `pytest` with a stub model (8 tests).
-- **Not yet verified with a real model:** the sandbox this was built in could not download model weights, so prompts were not tuned against Qwen output. First thing to do after setup: run the sample log, read the report, and adjust `app/prompts.py` if the model misses attacks or is too noisy. Record changes in `AI_USAGE.md`.
+- Models can only be switched from the terminal.
