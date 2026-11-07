@@ -1,38 +1,38 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Local AI Log Analyzer</title>
-<style>
-:root{--bg:#f6f7f4;--card:#fff;--ink:#17201a;--mut:#5d6b62;--line:#dfe4dc;--accent:#2f6b3f;
---crit:#9b1c1c;--high:#c2410c;--med:#a16207;--low:#4b6a8a}
-@media(prefers-color-scheme:dark){:root{--bg:#121613;--card:#1a1f1b;--ink:#e8ede9;--mut:#93a197;--line:#2a322c;--accent:#6fbf86;
---crit:#f87171;--high:#fb923c;--med:#facc15;--low:#7aa7d1}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,Segoe UI,sans-serif}
-main{max-width:980px;margin:0 auto;padding:24px 16px 64px}
-h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 10px}
-.sub{color:var(--mut);margin:0 0 20px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
-.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;cursor:pointer}
-button.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
-button:disabled{opacity:.45;cursor:not-allowed}
-input[type=file]{flex:1;min-width:200px}
-.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
-.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
-.pill{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;color:#fff}
-.Critical{background:var(--crit)}.High{background:var(--high)}.Medium{background:var(--med);color:#111}.Low{background:var(--low)}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
-.stat{border:1px solid var(--line);border-radius:10px;padding:8px 10px}.stat b{display:block;font-size:18px}.stat span{color:var(--mut);font-size:12px}
-.chunks{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
-.chunks i{width:18px;height:18px;border-radius:4px;background:var(--line)}
-.chunks i.done{background:var(--accent)}.chunks i.running{background:var(--med)}.chunks i.failed{background:var(--crit)}
-.f{border-top:1px solid var(--line);padding:12px 0}.f:first-child{border-top:0}
-.ev{font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);border-radius:6px;padding:6px 8px;margin:4px 0;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
-.mut{color:var(--mut)}.err{color:var(--crit)}.ok{color:var(--accent)}
-.log{font:12px ui-monospace,monospace;color:var(--mut);max-height:120px;overflow:auto}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Local AI Log Analyzer</title>
+  <style>
+    :root{--bg:#f6f7f4;--card:#fff;--ink:#17201a;--mut:#5d6b62;--line:#dfe4dc;--accent:#2f6b3f;
+    --crit:#9b1c1c;--high:#c2410c;--med:#a16207;--low:#4b6a8a}
+    @media(prefers-color-scheme:dark){:root{--bg:#121613;--card:#1a1f1b;--ink:#e8ede9;--mut:#93a197;--line:#2a322c;--accent:#6fbf86;
+    --crit:#f87171;--high:#fb923c;--med:#facc15;--low:#7aa7d1}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,Segoe UI,sans-serif}
+    main{max-width:980px;margin:0 auto;padding:24px 16px 64px}
+    h1{font-size:22px;margin:0 0 4px}h2{font-size:16px;margin:0 0 10px}
+    .sub{color:var(--mut);margin:0 0 20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;cursor:pointer}
+    button.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+    button:disabled{opacity:.45;cursor:not-allowed}
+    input[type=file]{flex:1;min-width:200px}
+    .bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+    .bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+    .pill{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;color:#fff}
+    .Critical{background:var(--crit)}.High{background:var(--high)}.Medium{background:var(--med);color:#111}.Low{background:var(--low)}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+    .stat{border:1px solid var(--line);border-radius:10px;padding:8px 10px}.stat b{display:block;font-size:18px}.stat span{color:var(--mut);font-size:12px}
+    .chunks{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+    .chunks i{width:18px;height:18px;border-radius:4px;background:var(--line)}
+    .chunks i.done{background:var(--accent)}.chunks i.running{background:var(--med)}.chunks i.failed{background:var(--crit)}
+    .f{border-top:1px solid var(--line);padding:12px 0}.f:first-child{border-top:0}
+    .ev{font:12px/1.4 ui-monospace,Menlo,monospace;background:var(--bg);border-radius:6px;padding:6px 8px;margin:4px 0;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+    .mut{color:var(--mut)}.err{color:var(--crit)}.ok{color:var(--accent)}
+    .log{font:12px ui-monospace,monospace;color:var(--mut);max-height:120px;overflow:auto}
+  </style>
 </head>
 <body>
 <main>
@@ -69,56 +69,56 @@ input[type=file]{flex:1;min-width:200px}
 </div>
 </main>
 <script>
-const $=id=>document.getElementById(id);let job=null,timer=null;
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-async function api(u,o){const r=await fetch(u,o);if(!r.ok){let m=r.statusText;try{m=(await r.json()).detail||m}catch(e){}throw new Error(m)}return r.json()}
-async function sys(){try{const s=await api('/api/status');$('sys').textContent=`Model: ${s.model}${s.model_present||s.engine==='mock'?'':' (NOT FOUND - run scripts/download_model.py)'} · context ${s.context} tokens · RAM now ${s.rss_mb} MB of ${s.ram_limit_mb} MB`}catch(e){}}
-sys();setInterval(sys,5000);
-$('file').onchange=async()=>{
-  const f=$('file').files[0];if(!f)return;$('msg').className='mut';$('msg').textContent='Uploading…';$('start').disabled=true;
-  const fd=new FormData();fd.append('file',f);
-  try{const r=await api('/api/upload',{method:'POST',body:fd});job=r.job_id;
-    $('msg').textContent=`Uploaded ${r.filename} (${(r.size_bytes/1024).toFixed(1)} KB). Ready.`;$('start').disabled=false}
-  catch(e){job=null;$('msg').className='err';$('msg').textContent='Upload rejected: '+e.message}
-};
-$('start').onclick=async()=>{
-  try{await api(`/api/jobs/${job}/start`,{method:'POST'});$('start').disabled=true;$('cancel').disabled=false;
-    $('progress').hidden=false;$('report').hidden=true;poll()}catch(e){$('msg').className='err';$('msg').textContent=e.message}
-};
-$('cancel').onclick=()=>api(`/api/jobs/${job}/cancel`,{method:'POST'});
-$('dlj').onclick=()=>location.href=`/api/jobs/${job}/report`;
-$('dlm').onclick=()=>location.href=`/api/jobs/${job}/report?format=md`;
-function poll(){clearInterval(timer);timer=setInterval(tick,1200);tick()}
-async function tick(){
-  let s;try{s=await api(`/api/jobs/${job}`)}catch(e){return}
-  const pct=s.total_chunks?Math.round(100*s.done_chunks/s.total_chunks):0;
-  $('fill').style.width=pct+'%';$('state').textContent='· '+s.status+(s.phase&&s.phase!==s.status?' ('+s.phase+')':'');
-  $('ptext').textContent=s.total_chunks?`${s.done_chunks} of ${s.total_chunks} chunks processed (${pct}%)`:'Preparing…';
-  const st=s.stats;
-  $('stats').innerHTML=[['Model calls',st.model_calls],['Retries',st.retries],['Timeouts',st.timeouts],['Bad JSON handled',st.invalid_json],
-   ['Avg call (s)',st.model_calls?(st.model_seconds/st.model_calls).toFixed(1):'-'],['RAM now (MB)',s.rss_mb],['Peak RAM (MB)',s.peak_rss_mb],['Elapsed (s)',s.elapsed_s]]
-   .map(([k,v])=>`<div class="stat"><b>${v}</b><span>${k}</span></div>`).join('');
-  $('chunks').innerHTML=s.chunks.map(c=>`<i class="${c.status}" title="chunk ${c.index} · lines ${c.lines} · ${c.status}${c.error?' · '+esc(c.error):''}"></i>`).join('');
-  $('events').innerHTML=s.events.map(e=>esc(e.msg)).join('<br>');
-  if(['done','partial','failed','cancelled'].includes(s.status)){
-    clearInterval(timer);$('cancel').disabled=true;$('start').disabled=true;
-    if(s.error){$('ptext').innerHTML+=`<br><span class="err">${esc(s.error)}</span>`}
-    if(s.has_report)showReport();
+  const $=id=>document.getElementById(id);let job=null,timer=null;
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  async function api(u,o){const r=await fetch(u,o);if(!r.ok){let m=r.statusText;try{m=(await r.json()).detail||m}catch(e){}throw new Error(m)}return r.json()}
+  async function sys(){try{const s=await api('/api/status');$('sys').textContent=`Model: ${s.model}${s.model_present||s.engine==='mock'?'':' (NOT FOUND - run scripts/download_model.py)'} · context ${s.context} tokens · RAM now ${s.rss_mb} MB of ${s.ram_limit_mb} MB`}catch(e){}}
+  sys();setInterval(sys,5000);
+  $('file').onchange=async()=>{
+    const f=$('file').files[0];if(!f)return;$('msg').className='mut';$('msg').textContent='Uploading…';$('start').disabled=true;
+    const fd=new FormData();fd.append('file',f);
+    try{const r=await api('/api/upload',{method:'POST',body:fd});job=r.job_id;
+      $('msg').textContent=`Uploaded ${r.filename} (${(r.size_bytes/1024).toFixed(1)} KB). Ready.`;$('start').disabled=false}
+    catch(e){job=null;$('msg').className='err';$('msg').textContent='Upload rejected: '+e.message}
+  };
+  $('start').onclick=async()=>{
+    try{await api(`/api/jobs/${job}/start`,{method:'POST'});$('start').disabled=true;$('cancel').disabled=false;
+      $('progress').hidden=false;$('report').hidden=true;poll()}catch(e){$('msg').className='err';$('msg').textContent=e.message}
+  };
+  $('cancel').onclick=()=>api(`/api/jobs/${job}/cancel`,{method:'POST'});
+  $('dlj').onclick=()=>location.href=`/api/jobs/${job}/report`;
+  $('dlm').onclick=()=>location.href=`/api/jobs/${job}/report?format=md`;
+  function poll(){clearInterval(timer);timer=setInterval(tick,1200);tick()}
+  async function tick(){
+    let s;try{s=await api(`/api/jobs/${job}`)}catch(e){return}
+    const pct=s.total_chunks?Math.round(100*s.done_chunks/s.total_chunks):0;
+    $('fill').style.width=pct+'%';$('state').textContent='· '+s.status+(s.phase&&s.phase!==s.status?' ('+s.phase+')':'');
+    $('ptext').textContent=s.total_chunks?`${s.done_chunks} of ${s.total_chunks} chunks processed (${pct}%)`:'Preparing…';
+    const st=s.stats;
+    $('stats').innerHTML=[['Model calls',st.model_calls],['Retries',st.retries],['Timeouts',st.timeouts],['Bad JSON handled',st.invalid_json],
+    ['Avg call (s)',st.model_calls?(st.model_seconds/st.model_calls).toFixed(1):'-'],['RAM now (MB)',s.rss_mb],['Peak RAM (MB)',s.peak_rss_mb],['Elapsed (s)',s.elapsed_s]]
+    .map(([k,v])=>`<div class="stat"><b>${v}</b><span>${k}</span></div>`).join('');
+    $('chunks').innerHTML=s.chunks.map(c=>`<i class="${c.status}" title="chunk ${c.index} · lines ${c.lines} · ${c.status}${c.error?' · '+esc(c.error):''}"></i>`).join('');
+    $('events').innerHTML=s.events.map(e=>esc(e.msg)).join('<br>');
+    if(['done','partial','failed','cancelled'].includes(s.status)){
+      clearInterval(timer);$('cancel').disabled=true;$('start').disabled=true;
+      if(s.error){$('ptext').innerHTML+=`<br><span class="err">${esc(s.error)}</span>`}
+      if(s.has_report)showReport();
+    }
   }
-}
-async function showReport(){
-  const r=await api(`/api/jobs/${job}/report`);$('report').hidden=false;
-  $('summary').textContent=r.summary||'';
-  $('counts').innerHTML=['Critical','High','Medium','Low'].map(k=>`<span class="pill ${k}">${k}: ${r.counts[k]}</span>`).join('');
-  $('findings').innerHTML=r.findings.length?r.findings.map(f=>`<div class="f">
-    <div><span class="pill ${f.severity}">${f.severity}</span> <b>${esc(f.attack_type.replace(/_/g,' '))}</b> · ${esc(f.entity)}
-    ${f.accounts.length?`<span class="mut"> · accounts ${f.accounts.map(esc).join(', ')}</span>`:''}
-    ${f.verified_by_log_facts?'<span class="ok"> ✓ backed by log facts</span>':'<span class="mut"> · unverified lead</span>'}</div>
-    <div>${esc(f.reason)}</div><div class="mut">Action: ${esc(f.action)} · chunks ${f.chunks.join(', ')||'linking'}</div>
-    ${f.evidence.map(e=>`<div class="ev">L${e.line}: ${esc(e.text)}</div>`).join('')}</div>`).join(''):'<p class="ok">No attacks reported.</p>';
-  $('signals').innerHTML=r.unconfirmed_signals.length?`<h2 style="margin-top:14px">Unconfirmed rule signals <span class="mut">(counted by rules, not the AI)</span></h2>`+
-    r.unconfirmed_signals.map(s=>`<div class="ev">${esc(s.summary)}</div>`).join(''):'';
-}
+  async function showReport(){
+    const r=await api(`/api/jobs/${job}/report`);$('report').hidden=false;
+    $('summary').textContent=r.summary||'';
+    $('counts').innerHTML=['Critical','High','Medium','Low'].map(k=>`<span class="pill ${k}">${k}: ${r.counts[k]}</span>`).join('');
+    $('findings').innerHTML=r.findings.length?r.findings.map(f=>`<div class="f">
+      <div><span class="pill ${f.severity}">${f.severity}</span> <b>${esc(f.attack_type.replace(/_/g,' '))}</b> · ${esc(f.entity)}
+      ${f.accounts.length?`<span class="mut"> · accounts ${f.accounts.map(esc).join(', ')}</span>`:''}
+      ${f.verified_by_log_facts?'<span class="ok"> ✓ backed by log facts</span>':'<span class="mut"> · unverified lead</span>'}</div>
+      <div>${esc(f.reason)}</div><div class="mut">Action: ${esc(f.action)} · chunks ${f.chunks.join(', ')||'linking'}</div>
+      ${f.evidence.map(e=>`<div class="ev">L${e.line}: ${esc(e.text)}</div>`).join('')}</div>`).join(''):'<p class="ok">No attacks reported.</p>';
+    $('signals').innerHTML=r.unconfirmed_signals.length?`<h2 style="margin-top:14px">Unconfirmed rule signals <span class="mut">(counted by rules, not the AI)</span></h2>`+
+      r.unconfirmed_signals.map(s=>`<div class="ev">${esc(s.summary)}</div>`).join(''):'';
+  }
 </script>
 </body>
 </html>
