@@ -21,7 +21,6 @@ jobs: dict[str, Job] = {}
 q: "queue.Queue[str]" = queue.Queue()
 ALLOWED_EXT = {".log", ".txt"}
 
-
 def _worker():
     while True:
         jid = q.get()
@@ -29,7 +28,6 @@ def _worker():
         if job and job.d["status"] in ("queued", "running", "failed", "partial") and not job.d["cancel"]:
             analyzer.run(job)
         q.task_done()
-
 
 @asynccontextmanager
 async def lifespan(_app):
@@ -48,9 +46,7 @@ async def lifespan(_app):
     threading.Thread(target=_worker, daemon=True).start()
     yield
 
-
 app = FastAPI(title="Local AI Security Log Analyzer", lifespan=lifespan)
-
 
 def _validate_upload(name: str, head: bytes, size: int):
     ext = Path(name or "").suffix.lower()
@@ -60,7 +56,6 @@ def _validate_upload(name: str, head: bytes, size: int):
         raise HTTPException(400, "The file is empty.")
     if b"\x00" in head:
         raise HTTPException(400, "This looks like a binary file, not a text log.")
-
 
 @app.post("/api/upload")
 async def upload(file: UploadFile = File(...)):
@@ -91,13 +86,11 @@ async def upload(file: UploadFile = File(...)):
     job.save()
     return {"job_id": job.id, "filename": name, "size_bytes": size}
 
-
 def _get(job_id: str) -> Job:
     j = jobs.get(job_id)
     if not j:
         raise HTTPException(404, "Unknown job.")
     return j
-
 
 @app.post("/api/jobs/{job_id}/start")
 def start(job_id: str):
@@ -113,11 +106,9 @@ def start(job_id: str):
     q.put(j.id)
     return j.public()
 
-
 @app.post("/api/jobs/{job_id}/resume")
 def resume(job_id: str):
     return start(job_id)
-
 
 @app.post("/api/jobs/{job_id}/cancel")
 def cancel(job_id: str):
@@ -127,17 +118,14 @@ def cancel(job_id: str):
     j.save()
     return j.public()
 
-
 @app.get("/api/jobs/{job_id}")
 def status(job_id: str):
     return _get(job_id).public()
-
 
 @app.get("/api/jobs")
 def list_jobs():
     return [{"id": j.id, "filename": j.d["filename"], "status": j.d["status"], "created": j.d["created"]}
             for j in sorted(jobs.values(), key=lambda x: -x.d["created"])][:20]
-
 
 @app.get("/api/jobs/{job_id}/report")
 def report(job_id: str, format: str = "json"):
@@ -149,12 +137,10 @@ def report(job_id: str, format: str = "json"):
         return PlainTextResponse(to_markdown(r), media_type="text/markdown")
     return JSONResponse(r)
 
-
 @app.get("/api/status")
 def system_status():
     return {"model": llm.name, "model_present": llm.available(), "engine": llm.kind, "rss_mb": rss_mb(),
             "ram_limit_mb": config.RAM_LIMIT_MB, "context": config.N_CTX, "max_upload_mb": config.MAX_UPLOAD_BYTES // 1048576}
-
 
 def to_markdown(r: dict) -> str:
     L = [f"# Security log report: {r['file']}", "", r.get("summary", ""), ""]
@@ -172,10 +158,8 @@ def to_markdown(r: dict) -> str:
     L += ["", f"_Model {s['model']}: {s['model_calls']} calls over {s['chunks']} chunks, peak RSS {s['peak_rss_mb']} MB_"]
     return "\n".join(L)
 
-
 @app.get("/")
 def index():
     return FileResponse(STATIC / "index.html")
-
 
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
