@@ -9,7 +9,7 @@ python3 -m venv .venv && source .venv/bin/activate # for Linux users
 #python -m venv .venv && source .venv/bin/activate # for Windows users
 pip install -r requirements.txt
 python scripts/download_model.py --size 0.8b    # Smaller, Faster, Less accurate
-#python scripts/download_model.py          # Larger, Slower, More accurate
+#python scripts/download_model.py --size 2b     # Larger, Slower, More accurate
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
